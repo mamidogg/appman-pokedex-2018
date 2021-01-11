@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { debounce } from "debounce";
+import fetch from "cross-fetch";
 import { TYPES } from "../constant/pokemon";
 
 //////////////// APP COMPONENTS ////////////////
@@ -13,13 +14,13 @@ import {
 } from "./shared/StyledComponents";
 import Card from "./Card";
 
-let loadData = debounce((setData, searchName = "") => {
+export const FetchData = (setData, searchName = "") => {
   let type = "";
   if (searchName !== "" && TYPES.includes(searchName.toLocaleUpperCase())) {
     type = searchName;
     searchName = "";
   }
-  fetch(
+  return fetch(
     `http://localhost:3030/api/cards?limit=50&name=${searchName}&type=${type}`,
     {
       method: "GET",
@@ -30,15 +31,18 @@ let loadData = debounce((setData, searchName = "") => {
   )
     .then((response) => response.json())
     .then((data) => {
-      setData(
-        data.cards.filter(
-          (ele) =>
-            ele.supertype === "Pokémon" ||
-            ele.supertype.toLowerCase() === "pokemon"
-        )
+      data = data.cards.filter(
+        (ele) =>
+          ele.supertype === "Pokémon" ||
+          ele.supertype.toLowerCase() === "pokemon"
       );
+      setData(data);
+
+      return data;
     });
-}, 500);
+};
+
+const LoadData = debounce(FetchData, 500);
 
 const SearchInput = (props) => {
   const [searchName, setSearchName] = useState("");
@@ -46,7 +50,7 @@ const SearchInput = (props) => {
   let selectedVal = props.selectedData.map((ele) => ele.id);
 
   useEffect(() => {
-    loadData(setData, searchName);
+    LoadData(setData, searchName);
   }, [searchName, props.isShowModal, selectedVal.length]);
 
   return (

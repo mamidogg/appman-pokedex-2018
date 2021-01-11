@@ -17,7 +17,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cross-env NODE_ENV=test ava",
     "api": "node ./src/server.js",
     "eject": "react-scripts eject"
   },
@@ -38,5 +38,36 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "devDependencies": {
+    "@ava/babel": "^1.0.1",
+    "@babel/core": "^7.12.10",
+    "@babel/register": "^7.12.10",
+    "ava": "^3.15.0",
+    "babel-preset-react-app": "^10.0.0",
+    "cross-env": "^7.0.3",
+    "cross-fetch": "^3.0.6",
+    "ignore-styles": "^5.0.1",
+    "jsdom": "^16.4.0"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "ava": {
+    "babel": {
+      "testOptions": {
+        "presets": [
+          "@babel/preset-react"
+        ]
+      }
+    },
+    "require": [
+      "@babel/register",
+      "ignore-styles",
+      "cross-fetch",
+      "./src/avaSetup"
+    ]
   }
 }

@@ -10,7 +10,7 @@ const SelectedCardList = (props) => {
   return (
     <ListWarpper height={"600px"}>
       {props.selectedData.map((ele) => (
-        <Col width={50}>
+        <Col key={"_scol" + ele.id} width={50}>
           <Card
             id={ele.id}
             type="remove"

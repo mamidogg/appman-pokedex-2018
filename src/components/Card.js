@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import { COMPONENT_COLORS } from "../constant/theme";
 
 //////////////// APP COMPONENTS ////////////////
@@ -16,32 +15,34 @@ import {
 import LevelTube from "./LevelTube";
 import cuteImage from "../cute.png";
 
-const FindPokemonHP = (hp) => {
+export const FindPokemonHP = (hp) => {
   let val = hp;
-  return val > 100 ? 100 : val;
+  return val > 100 ? 100 : val < 0 ? 0 : val;
 };
 
-const FindPokemonStrength = (attacks) => {
+export const FindPokemonStrength = (attacks) => {
   let val = attacks.length * 50;
   return val > 100 ? 100 : val;
 };
 
-const FindPokemonWeaknesses = (weaknesses) => {
+export const FindPokemonWeaknesses = (weaknesses) => {
   let val = weaknesses.length * 100;
   return val > 100 ? 100 : val;
 };
 
-const FindPokemonCuteRank = (hp, attacks, weakness) => {
+export const FindPokemonCuteRank = (hp, attacks, weakness) => {
   let totalDamage = 0;
 
   attacks.map((ele) => {
-    let damage = ele.damage == "" ? [0] : ele.damage.match(/\d+/g);
+    let damage = ele.damage === "" ? [0] : ele.damage.match(/\d+/g);
 
     damage = damage.join("");
 
     totalDamage += parseInt(damage);
+
+    return ele;
   });
-  let cuteRank = hp / 10 + (totalDamage / 10 + 10) - weakness / 5;
+  let cuteRank = (hp / 10 + (totalDamage / 10 + 10) - weakness) / 5;
 
   return cuteRank;
 };
